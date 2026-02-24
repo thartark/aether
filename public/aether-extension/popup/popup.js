@@ -400,7 +400,7 @@ async function runCompare() {
     loadStats();
   } catch (err) {
     div.innerHTML = `<div class="compare-card"><div class="compare-error">${esc(err.message)}</div></div>`;
-  } finally { btn.disabled = false; btn.textContent = 'Compare All Providers'; }
+  } finally { btn.disabled = false; btn.textContent = 'Battle All AIs'; }
 }
 
 // ── Fuse Answers ────────────────────────────────────────────

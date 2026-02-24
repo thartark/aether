@@ -1,286 +1,310 @@
 /* ============================================================
-   Aether - Content Script Styles
+   Aether Content Script Styles v3.0
+   Fully reworked toolbar + panel + toast
    ============================================================ */
 
-/* ── Floating Toolbar ──────────────────────────────────────── */
+/* ── Floating Toolbar (2 rows: primary actions + secondary) ── */
 #aether-toolbar {
   position: absolute;
   z-index: 2147483647;
   display: none;
-  align-items: center;
-  gap: 4px;
-  padding: 4px;
-  background: #1a1a2e;
-  border: 1px solid rgba(99, 102, 241, 0.3);
-  border-radius: 10px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(99, 102, 241, 0.1);
+  flex-direction: column;
+  gap: 3px;
+  padding: 6px;
+  background: #12122a;
+  border: 1px solid rgba(99,102,241,0.35);
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.45), 0 0 0 1px rgba(99,102,241,0.08), inset 0 1px 0 rgba(255,255,255,0.04);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  animation: aether-fade-in 0.15s ease-out;
+  animation: aether-pop 0.12s cubic-bezier(0.34,1.56,0.64,1);
+  backdrop-filter: blur(12px);
 }
+#aether-toolbar.aether-visible { display: flex; }
 
-#aether-toolbar.aether-visible {
+/* Row containers */
+#aether-toolbar .aether-row {
   display: flex;
+  align-items: center;
+  gap: 2px;
 }
 
+/* All toolbar buttons */
 #aether-toolbar button {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
-  padding: 6px 10px;
+  gap: 4px;
+  padding: 5px 9px;
   border: none;
   border-radius: 7px;
   background: transparent;
-  color: #e0e0ff;
-  font-size: 12px;
+  color: #b0b4d4;
+  font-size: 11px;
   font-weight: 500;
   font-family: inherit;
   cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition: background 0.1s, color 0.1s, transform 0.1s;
   white-space: nowrap;
   line-height: 1;
+  position: relative;
 }
-
 #aether-toolbar button:hover {
-  background: rgba(99, 102, 241, 0.2);
+  background: rgba(99,102,241,0.18);
   color: #fff;
+  transform: translateY(-1px);
 }
+#aether-toolbar button:active { transform: translateY(0); }
 
+#aether-toolbar button svg { width: 13px; height: 13px; flex-shrink: 0; }
+
+/* Primary answer button */
 #aether-toolbar button.aether-primary {
   background: linear-gradient(135deg, #6366f1, #4f46e5);
   color: #fff;
+  font-weight: 600;
+  padding: 5px 12px;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.3);
 }
-
 #aether-toolbar button.aether-primary:hover {
   background: linear-gradient(135deg, #818cf8, #6366f1);
+  box-shadow: 0 4px 14px rgba(99,102,241,0.4);
 }
 
-#aether-toolbar button svg {
-  width: 14px;
-  height: 14px;
+/* Divider */
+#aether-toolbar .aether-sep {
+  width: 1px;
+  height: 18px;
+  background: rgba(255,255,255,0.08);
+  margin: 0 2px;
   flex-shrink: 0;
 }
 
-#aether-toolbar .aether-divider {
-  width: 1px;
-  height: 20px;
-  background: rgba(255, 255, 255, 0.1);
-  margin: 0 2px;
+/* Instant tooltip (custom, no delay) */
+#aether-toolbar button .aether-tip {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%) scale(0.9);
+  padding: 3px 8px;
+  background: #1e1e3a;
+  border: 1px solid rgba(99,102,241,0.25);
+  border-radius: 5px;
+  color: #c8c8ee;
+  font-size: 10px;
+  font-weight: 500;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.08s, transform 0.08s;
+  z-index: 10;
+}
+#aether-toolbar button:hover .aether-tip {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
 }
 
-/* ── Inline Result Panel ───────────────────────────────────── */
+/* ── Inline Result Panel ──────────────────────────────────── */
 #aether-result-panel {
   position: fixed;
   top: 50%;
   right: 20px;
   transform: translateY(-50%);
   z-index: 2147483646;
-  width: 400px;
-  max-height: 70vh;
-  background: #1a1a2e;
-  border: 1px solid rgba(99, 102, 241, 0.3);
+  width: 420px;
+  max-height: 75vh;
+  background: #12122a;
+  border: 1px solid rgba(99,102,241,0.3);
   border-radius: 14px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 24px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(99,102,241,0.06);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   overflow: hidden;
-  animation: aether-slide-in 0.2s ease-out;
   display: none;
+  animation: aether-slide 0.18s ease-out;
 }
+#aether-result-panel.aether-visible { display: flex; flex-direction: column; }
 
-#aether-result-panel.aether-visible {
-  display: flex;
-  flex-direction: column;
-}
-
-#aether-result-panel .aether-panel-header {
+/* Panel header */
+.aether-panel-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 14px 16px;
-  background: rgba(99, 102, 241, 0.08);
-  border-bottom: 1px solid rgba(99, 102, 241, 0.15);
+  gap: 8px;
+  padding: 12px 14px;
+  background: rgba(99,102,241,0.06);
+  border-bottom: 1px solid rgba(99,102,241,0.12);
 }
-
-#aether-result-panel .aether-panel-header h3 {
+.aether-panel-header h3 {
   margin: 0;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
-  color: #e0e0ff;
-}
-
-#aether-result-panel .aether-panel-header .aether-badge {
-  font-size: 11px;
-  padding: 2px 8px;
-  border-radius: 20px;
-  background: rgba(99, 102, 241, 0.2);
-  color: #a5b4fc;
-}
-
-#aether-result-panel .aether-panel-close {
-  width: 28px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  border-radius: 6px;
-  background: transparent;
-  color: #a0a0cc;
-  cursor: pointer;
-  font-size: 16px;
-  line-height: 1;
-}
-
-#aether-result-panel .aether-panel-close:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-}
-
-#aether-result-panel .aether-panel-close svg {
-  width: 16px;
-  height: 16px;
-}
-
-#aether-result-panel .aether-panel-header h3 {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-#aether-result-panel .aether-panel-header h3 svg {
-  width: 16px;
-  height: 16px;
-  color: #818cf8;
-}
-
-#aether-result-panel .aether-panel-actions button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-}
-
-#aether-result-panel .aether-panel-actions button svg {
-  width: 14px;
-  height: 14px;
-}
-
-#aether-result-panel .aether-panel-body {
-  padding: 16px;
-  overflow-y: auto;
-  max-height: calc(70vh - 100px);
   color: #d0d0ee;
-  font-size: 14px;
-  line-height: 1.6;
-}
-
-#aether-result-panel .aether-panel-body p {
-  margin: 0 0 10px;
-}
-
-#aether-result-panel .aether-panel-body .aether-loading {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 40px 20px;
-  color: #a5b4fc;
-  font-size: 13px;
-}
-
-#aether-result-panel .aether-panel-body .aether-error {
-  padding: 12px;
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.2);
-  border-radius: 8px;
-  color: #fca5a5;
-  font-size: 13px;
-}
-
-#aether-result-panel .aether-panel-actions {
-  display: flex;
-  gap: 6px;
-  padding: 12px 16px;
-  border-top: 1px solid rgba(99, 102, 241, 0.15);
-}
-
-#aether-result-panel .aether-panel-actions button {
+  gap: 5px;
   flex: 1;
-  padding: 8px 12px;
-  border: 1px solid rgba(99, 102, 241, 0.2);
-  border-radius: 8px;
+}
+.aether-panel-header h3 svg { width: 14px; height: 14px; color: #818cf8; }
+.aether-panel-header .aether-badge {
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 20px;
+  background: rgba(99,102,241,0.15);
+  color: #a5b4fc;
+  font-weight: 500;
+}
+.aether-panel-close {
+  width: 26px; height: 26px;
+  display: flex; align-items: center; justify-content: center;
+  border: none; border-radius: 6px; background: transparent;
+  color: #777; cursor: pointer; transition: all 0.1s;
+}
+.aether-panel-close:hover { background: rgba(255,255,255,0.08); color: #fff; }
+.aether-panel-close svg { width: 14px; height: 14px; }
+
+/* Quick-action bar (switch actions without re-selecting text) */
+.aether-quick-bar {
+  display: flex;
+  gap: 2px;
+  padding: 6px 10px;
+  border-bottom: 1px solid rgba(99,102,241,0.08);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.aether-quick-bar::-webkit-scrollbar { display: none; }
+.aether-quick-bar button {
+  padding: 3px 8px;
+  border: none;
+  border-radius: 5px;
   background: transparent;
-  color: #c0c0dd;
-  font-size: 12px;
+  color: #666;
+  font-size: 10px;
   font-weight: 500;
   font-family: inherit;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.1s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.aether-quick-bar button:hover {
+  background: rgba(99,102,241,0.1);
+  color: #a5b4fc;
+}
+.aether-quick-bar button.aq-active {
+  background: rgba(99,102,241,0.2);
+  color: #a5b4fc;
+  font-weight: 600;
 }
 
-#aether-result-panel .aether-panel-actions button:hover {
-  background: rgba(99, 102, 241, 0.15);
-  color: #fff;
-  border-color: rgba(99, 102, 241, 0.4);
+/* Panel body */
+.aether-panel-body {
+  padding: 14px;
+  overflow-y: auto;
+  max-height: calc(75vh - 110px);
+  color: #c8c8e8;
+  font-size: 13.5px;
+  line-height: 1.65;
 }
+.aether-panel-body .aether-loading {
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px; padding: 40px 16px; color: #a5b4fc; font-size: 13px;
+}
+.aether-panel-body .aether-error {
+  padding: 12px; background: rgba(239,68,68,0.08);
+  border: 1px solid rgba(239,68,68,0.15); border-radius: 8px;
+  color: #fca5a5; font-size: 13px; line-height: 1.5;
+}
+.aether-panel-body .aether-meta {
+  margin-top: 10px; font-size: 11px; color: #555;
+  display: flex; gap: 6px; flex-wrap: wrap; align-items: center;
+}
+.aether-panel-body .aether-meta .over { color: #ef4444; font-weight: 600; }
+.aether-panel-body .aether-meta .within { color: #22c55e; }
 
-#aether-result-panel .aether-panel-actions button.aether-btn-primary {
+/* Panel action bar */
+.aether-panel-actions {
+  display: flex; gap: 4px; padding: 10px 14px;
+  border-top: 1px solid rgba(99,102,241,0.1);
+  flex-wrap: wrap;
+}
+.aether-panel-actions button {
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+  padding: 6px 11px; border: 1px solid rgba(99,102,241,0.15);
+  border-radius: 7px; background: transparent;
+  color: #b0b0d0; font-size: 11px; font-weight: 500;
+  font-family: inherit; cursor: pointer; transition: all 0.1s;
+}
+.aether-panel-actions button:hover {
+  background: rgba(99,102,241,0.12); color: #fff;
+  border-color: rgba(99,102,241,0.3);
+}
+.aether-panel-actions button svg { width: 12px; height: 12px; }
+.aether-panel-actions button.aether-btn-primary {
   background: linear-gradient(135deg, #6366f1, #4f46e5);
-  border-color: transparent;
-  color: #fff;
+  border-color: transparent; color: #fff;
+}
+.aether-panel-actions button.aether-btn-primary:hover {
+  background: linear-gradient(135deg, #818cf8, #6366f1);
 }
 
-/* ── Spinner ───────────────────────────────────────────────── */
+/* Compare cards inside panel */
+.aether-compare-card {
+  margin-bottom: 12px; padding: 11px;
+  background: rgba(99,102,241,0.05);
+  border: 1px solid rgba(99,102,241,0.1);
+  border-radius: 10px;
+}
+.aether-compare-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 6px;
+}
+.aether-compare-header strong { color: #a5b4fc; font-size: 12px; }
+.aether-compare-header span { color: #555; font-size: 10px; }
+.aether-compare-body {
+  color: #c0c0e0; font-size: 13px; line-height: 1.55;
+  white-space: pre-wrap; max-height: 110px; overflow-y: auto;
+}
+.aether-compare-copy {
+  margin-top: 6px; padding: 3px 8px;
+  border: 1px solid rgba(99,102,241,0.15); border-radius: 5px;
+  background: transparent; color: #a5b4fc; font-size: 10px;
+  cursor: pointer; transition: all 0.1s;
+}
+.aether-compare-copy:hover { background: rgba(99,102,241,0.1); }
+
+/* ── Spinner ──────────────────────────────────────────────── */
 .aether-spinner {
-  width: 18px;
-  height: 18px;
-  border: 2px solid rgba(99, 102, 241, 0.2);
+  width: 16px; height: 16px;
+  border: 2px solid rgba(99,102,241,0.15);
   border-top-color: #6366f1;
   border-radius: 50%;
-  animation: aether-spin 0.6s linear infinite;
+  animation: aether-spin 0.5s linear infinite;
 }
 
-/* ── Notification Toast ────────────────────────────────────── */
+/* ── Toast ──────────────────��─────────────────────────────── */
 #aether-toast {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
+  position: fixed; bottom: 24px; right: 24px;
   z-index: 2147483647;
-  padding: 12px 20px;
+  padding: 10px 18px;
   background: #1a1a2e;
-  border: 1px solid rgba(99, 102, 241, 0.3);
+  border: 1px solid rgba(99,102,241,0.25);
   border-radius: 10px;
-  color: #e0e0ff;
+  color: #d0d0ee;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 13px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-  animation: aether-fade-in 0.2s ease-out;
+  font-size: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
   display: none;
+  animation: aether-pop 0.15s ease-out;
 }
+#aether-toast.aether-visible { display: block; }
+#aether-toast.aether-success { border-color: rgba(34,197,94,0.3); }
+#aether-toast.aether-error { border-color: rgba(239,68,68,0.3); color: #fca5a5; }
 
-#aether-toast.aether-visible {
-  display: block;
-}
-
-#aether-toast.aether-success {
-  border-color: rgba(34, 197, 94, 0.3);
-}
-
-#aether-toast.aether-error {
-  border-color: rgba(239, 68, 68, 0.3);
-}
-
-/* ── Animations ────────────────────────────────────────────── */
-@keyframes aether-fade-in {
-  from { opacity: 0; transform: scale(0.95); }
+/* ── Animations ───────────────────────────────────────────── */
+@keyframes aether-pop {
+  from { opacity: 0; transform: scale(0.92); }
   to { opacity: 1; transform: scale(1); }
 }
-
-@keyframes aether-slide-in {
-  from { opacity: 0; transform: translateY(-50%) translateX(20px); }
+@keyframes aether-slide {
+  from { opacity: 0; transform: translateY(-50%) translateX(16px); }
   to { opacity: 1; transform: translateY(-50%) translateX(0); }
 }
-
-@keyframes aether-spin {
-  to { transform: rotate(360deg); }
-}
+@keyframes aether-spin { to { transform: rotate(360deg); } }

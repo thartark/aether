@@ -14,7 +14,7 @@
       <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.912 5.813a2 2 0 001.275 1.275L21 12l-5.813 1.912a2 2 0 00-1.275 1.275L12 21l-1.912-5.813a2 2 0 00-1.275-1.275L3 12l5.813-1.912a2 2 0 001.275-1.275L12 3z"/></svg></div>
       <div class="header-text">
         <span class="header-title">Aether</span>
-        <span class="header-version">v2.0</span>
+        <span class="header-version">v3.0</span>
       </div>
     </div>
     <div class="header-actions">
@@ -49,7 +49,7 @@
   <!-- Nav Tabs -->
   <nav class="tabs">
     <button class="tab active" data-tab="generate">Generate</button>
-    <button class="tab" data-tab="compare">Compare</button>
+    <button class="tab" data-tab="compare">AI Battle</button>
     <button class="tab" data-tab="personas">Personas</button>
     <button class="tab" data-tab="history">History</button>
     <button class="tab" data-tab="apps">Apps</button>
@@ -80,7 +80,7 @@
           <button class="chip" data-template="pros-cons">Pros/Cons</button>
           <button class="chip" data-template="email">Email</button>
           <button class="chip" data-template="job-application">Job App</button>
-          <button class="chip" data-template="star-method">STAR</button>
+          <button class="chip" data-template="star-method">Story Mode</button>
           <button class="chip" data-template="ats-optimize">ATS</button>
           <button class="chip" data-template="bullet-points">Bullets</button>
           <button class="chip" data-template="rewrite">Rewrite</button>
@@ -138,7 +138,7 @@
       <!-- Generate Buttons -->
       <div class="action-row">
         <button class="btn-generate" id="btn-generate">Generate Answer</button>
-        <button class="btn-outline" id="btn-compare-quick" title="Compare across all providers">Compare</button>
+        <button class="btn-outline" id="btn-compare-quick" title="Send to all AIs and compare side-by-side">AI Battle</button>
         <button class="btn-outline" id="btn-personas-quick" title="Multi-persona view">Personas</button>
       </div>
 
@@ -168,10 +168,10 @@
   <!-- ═══ Compare Tab ═══ -->
   <div class="tab-content" id="tab-compare">
     <div class="tab-body">
-      <div class="field"><label class="field-label">Text to compare</label><textarea class="textarea" id="compare-text" placeholder="Enter text to send to all configured AI providers..." rows="3"></textarea></div>
+      <div class="field"><label class="field-label">Text to battle-test across all AIs</label><textarea class="textarea" id="compare-text" placeholder="Enter text to send to all configured AI providers simultaneously..." rows="3"></textarea></div>
       <div class="action-row" style="margin-bottom:14px;">
-        <button class="btn-generate" id="btn-run-compare">Compare All Providers</button>
-        <button class="btn-outline" id="btn-fuse-answers" title="Combine best parts of all answers" style="display:none;">Fuse</button>
+        <button class="btn-generate" id="btn-run-compare">Battle All AIs</button>
+        <button class="btn-outline" id="btn-fuse-answers" title="Combine best parts of all answers into one super-answer" style="display:none;">Fuse Best</button>
       </div>
       <div id="compare-results"></div>
       <div class="answer-box" id="fused-box" style="display:none;">

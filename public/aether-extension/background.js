@@ -282,11 +282,11 @@ chrome.runtime.onInstalled.addListener(() => {
     { id: 'aether-summarize', title: 'Aether: Summarize' },
     { id: 'aether-simplify', title: 'Aether: Simplify' },
     { id: 'aether-expand', title: 'Aether: Expand' },
-    { id: 'aether-star', title: 'Aether: STAR Method' },
+    { id: 'aether-star', title: 'Aether: Story Mode (STAR)' },
     { id: 'aether-fix-grammar', title: 'Aether: Fix Grammar' },
     { id: 'aether-bullet-points', title: 'Aether: Bullet Points' },
     { id: 'aether-counter', title: 'Aether: Counter-Argument' },
-    { id: 'aether-compare', title: 'Aether: Compare All AIs' },
+    { id: 'aether-compare', title: 'Aether: AI Battle (Compare All)' },
     { id: 'aether-personas', title: 'Aether: Multi-Persona View' },
   ];
   menus.forEach(m => chrome.contextMenus.create({ ...m, contexts: ['selection'] }));
@@ -365,6 +365,14 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     getDraft: () => getDraft(message.siteKey, message.fieldKey),
     getSitePermission: () => getSitePermission(message.site),
     setSitePermission: () => setSitePermission(message.site, message.allowed).then(() => ({ success: true })),
+    // ── v3 Feature Handlers ──
+    clarityScore: () => handleClarityScore(message),
+    trickQuestionDetect: () => handleTrickQuestion(message),
+    atsKeywords: () => handleATSKeywords(message),
+    confidenceScore: () => handleConfidenceScore(message),
+    toneAnalysis: () => handleToneAnalysis(message),
+    companyResearch: () => handleCompanyResearch(message),
+    interviewCoach: () => handleInterviewCoach(message),
   };
 
   const handler = handlers[message.action];
@@ -492,8 +500,8 @@ async function buildMessages(text, template, persona, profileData, tone, length,
   }
 
   let charLimitNote = '';
-  if (charLimit && charLimit > 0) {
-    charLimitNote = `\n\nIMPORTANT: The response MUST be under ${charLimit} characters. Do not exceed this limit.`;
+  if (charLimit && charLimit > 100) {
+    charLimitNote = `\n\nThe target field has a ${charLimit} character limit. Try to keep your response within that limit while still being thorough and helpful.`;
   }
 
   const systemParts = [personaPrompt, tonePrompt, lengthPrompt, levelPrompt, charLimitNote].filter(Boolean);
@@ -1048,6 +1056,146 @@ async function setSitePermission(site, allowed) {
   const perms = sitePermissions || {};
   perms[site] = allowed;
   await chrome.storage.local.set({ sitePermissions: perms });
+}
+
+// ── Clarity Score ───────────────────────────────────────────
+
+async function handleClarityScore(msg) {
+  const { text } = msg;
+  const stored = await chrome.storage.local.get(['apiKeys', 'settings']);
+  const provider = stored.settings?.defaultProvider || 'groq';
+  const apiKey = stored.apiKeys?.[provider];
+  if (!apiKey) throw new Error('No API key configured.');
+  const caller = CALLERS[provider];
+  const model = PROVIDERS[provider].defaultModel;
+
+  const messages = [
+    { role: 'system', content: 'Score this text for clarity on a scale of 1-100. Return JSON: { "score": <1-100>, "grade": "<A/B/C/D/F>", "issues": [<specific issues>], "suggestion": "<one line improvement tip>" }. Return ONLY valid JSON.' },
+    { role: 'user', content: text },
+  ];
+  const answer = await caller(apiKey, model, messages, 0.2);
+  try { return JSON.parse(answer); } catch { return { score: 50, grade: '?', issues: [], suggestion: answer.substring(0, 200) }; }
+}
+
+// ── Trick Question Detector ─────────────────────────────────
+
+async function handleTrickQuestion(msg) {
+  const { question } = msg;
+  const stored = await chrome.storage.local.get(['apiKeys', 'settings']);
+  const provider = stored.settings?.defaultProvider || 'groq';
+  const apiKey = stored.apiKeys?.[provider];
+  if (!apiKey) throw new Error('No API key configured.');
+  const caller = CALLERS[provider];
+  const model = PROVIDERS[provider].defaultModel;
+
+  const messages = [
+    { role: 'system', content: `Analyze this question for trick elements, hidden meanings, or common pitfalls. Return JSON: { "isTrick": <boolean>, "trickType": "<type or null>", "warning": "<what to watch out for>", "strategy": "<how to answer well>" }. Trick types: "salary-trap", "weakness-bait", "hypothetical-gotcha", "loyalty-test", "illegal-question", "negative-framing", null. Return ONLY valid JSON.` },
+    { role: 'user', content: question },
+  ];
+  const answer = await caller(apiKey, model, messages, 0.2);
+  try { return JSON.parse(answer); } catch { return { isTrick: false, trickType: null, warning: '', strategy: answer.substring(0, 200) }; }
+}
+
+// ── ATS Keyword Extraction ──────────────────────────────────
+
+async function handleATSKeywords(msg) {
+  const { jobDescription, answerText } = msg;
+  const stored = await chrome.storage.local.get(['apiKeys', 'settings']);
+  const provider = stored.settings?.defaultProvider || 'groq';
+  const apiKey = stored.apiKeys?.[provider];
+  if (!apiKey) throw new Error('No API key configured.');
+  const caller = CALLERS[provider];
+  const model = PROVIDERS[provider].defaultModel;
+
+  const prompt = answerText
+    ? `Compare this answer against the job description. Return JSON: { "matchedKeywords": [<keywords found in both>], "missingKeywords": [<important keywords from JD not in answer>], "atsScore": <0-100>, "suggestions": [<how to improve>] }. Return ONLY valid JSON.\n\nJob Description:\n${jobDescription}\n\nAnswer:\n${answerText}`
+    : `Extract important ATS keywords from this job description. Return JSON: { "keywords": [<important keywords>], "skills": [<technical skills>], "softSkills": [<soft skills>], "certifications": [<any certs mentioned>] }. Return ONLY valid JSON.\n\n${jobDescription}`;
+
+  const messages = [{ role: 'system', content: 'You are an ATS optimization expert.' }, { role: 'user', content: prompt }];
+  const answer = await caller(apiKey, model, messages, 0.2);
+  try { return JSON.parse(answer); } catch { return { keywords: [], raw: answer.substring(0, 500) }; }
+}
+
+// ── Confidence Scoring ──────────────────────────────────────
+
+async function handleConfidenceScore(msg) {
+  const { question, answer } = msg;
+  const stored = await chrome.storage.local.get(['apiKeys', 'settings']);
+  const provider = stored.settings?.defaultProvider || 'groq';
+  const apiKey = stored.apiKeys?.[provider];
+  if (!apiKey) throw new Error('No API key configured.');
+  const caller = CALLERS[provider];
+  const model = PROVIDERS[provider].defaultModel;
+
+  const messages = [
+    { role: 'system', content: 'Rate how well this answer addresses the question. Return JSON: { "confidence": <0-100>, "strengths": [<what it does well>], "gaps": [<what it misses>], "verdict": "<one sentence verdict>" }. Return ONLY valid JSON.' },
+    { role: 'user', content: `Question: ${question}\n\nAnswer: ${answer}` },
+  ];
+  const result = await caller(apiKey, model, messages, 0.2);
+  try { return JSON.parse(result); } catch { return { confidence: 50, strengths: [], gaps: [], verdict: result.substring(0, 200) }; }
+}
+
+// ── Tone Analysis ───────────────────────────────────────────
+
+async function handleToneAnalysis(msg) {
+  const { text } = msg;
+  const stored = await chrome.storage.local.get(['apiKeys', 'settings']);
+  const provider = stored.settings?.defaultProvider || 'groq';
+  const apiKey = stored.apiKeys?.[provider];
+  if (!apiKey) throw new Error('No API key configured.');
+  const caller = CALLERS[provider];
+  const model = PROVIDERS[provider].defaultModel;
+
+  const messages = [
+    { role: 'system', content: 'Analyze the tone and sentiment of this text. Return JSON: { "primaryTone": "<tone>", "tones": [{ "name": "<tone>", "score": <0-100> }], "formality": <1-10>, "readability": "<easy/medium/advanced>", "suggestions": [<tone improvements>] }. Return ONLY valid JSON.' },
+    { role: 'user', content: text },
+  ];
+  const result = await caller(apiKey, model, messages, 0.2);
+  try { return JSON.parse(result); } catch { return { primaryTone: 'unknown', tones: [], formality: 5, readability: 'medium', suggestions: [] }; }
+}
+
+// ── Company Research (basic info extraction) ────────────────
+
+async function handleCompanyResearch(msg) {
+  const { companyName, jobTitle } = msg;
+  const stored = await chrome.storage.local.get(['apiKeys', 'settings']);
+  const provider = stored.settings?.defaultProvider || 'groq';
+  const apiKey = stored.apiKeys?.[provider];
+  if (!apiKey) throw new Error('No API key configured.');
+  const caller = CALLERS[provider];
+  const model = PROVIDERS[provider].defaultModel;
+
+  const messages = [
+    { role: 'system', content: 'Provide a brief research summary about this company for a job applicant. Return JSON: { "summary": "<2-3 sentence overview>", "industry": "<industry>", "size": "<company size estimate>", "culture": "<culture notes>", "interviewTips": [<3 tips>], "questionsToAsk": [<3 questions to ask interviewer>], "keywords": [<keywords to use in application>] }. Return ONLY valid JSON.' },
+    { role: 'user', content: `Company: ${companyName}${jobTitle ? `\nPosition: ${jobTitle}` : ''}` },
+  ];
+  const result = await caller(apiKey, model, messages, 0.3);
+  try { return JSON.parse(result); } catch { return { summary: result.substring(0, 500), industry: '', size: '', culture: '', interviewTips: [], questionsToAsk: [], keywords: [] }; }
+}
+
+// ── Interview Coach ─────────────────────────────────────────
+
+async function handleInterviewCoach(msg) {
+  const { question, context } = msg;
+  const stored = await chrome.storage.local.get(['apiKeys', 'profile', 'settings']);
+  const provider = stored.settings?.defaultProvider || 'groq';
+  const apiKey = stored.apiKeys?.[provider];
+  if (!apiKey) throw new Error('No API key configured.');
+  const caller = CALLERS[provider];
+  const model = PROVIDERS[provider].defaultModel;
+  const profile = stored.profile || {};
+
+  let profileText = '';
+  if (profile.name) profileText += `Name: ${profile.name}\n`;
+  if (profile.skills) profileText += `Skills: ${profile.skills}\n`;
+  if (profile.experience) profileText += `Experience: ${profile.experience}\n`;
+
+  const messages = [
+    { role: 'system', content: `You are a career coach. Help craft the best answer for this interview/application question. Return JSON: { "suggestedAnswer": "<full answer>", "keyPoints": [<main points to hit>], "doNots": [<things to avoid>], "followUp": "<likely follow-up question>" }. Return ONLY valid JSON.` },
+    { role: 'user', content: `Question: ${question}\n${context ? `Context: ${context}\n` : ''}${profileText ? `My Profile:\n${profileText}` : ''}` },
+  ];
+  const result = await caller(apiKey, model, messages, 0.4);
+  try { return JSON.parse(result); } catch { return { suggestedAnswer: result.substring(0, 1000), keyPoints: [], doNots: [], followUp: '' }; }
 }
 
 // ── History Management ───────────────────────────────────────

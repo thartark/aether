@@ -1,0 +1,527 @@
+/* Aether Features Styles v3.1 -- Mega Feature Styles */
+
+/* ── Live Word/Char Counter ──────────────────────────────── */
+.aether-field-counter {
+  position: absolute;
+  bottom: 6px;
+  right: 8px;
+  display: flex;
+  gap: 8px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 10px;
+  color: #888;
+  pointer-events: none;
+  z-index: 10;
+  background: rgba(255,255,255,0.85);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+@media (prefers-color-scheme: dark) {
+  .aether-field-counter { background: rgba(18,18,42,0.85); color: #777; }
+}
+
+/* ── Clarity Score Badge ─────────────────────────────────── */
+.aether-clarity-badge {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 10px;
+  color: #999;
+  background: rgba(255,255,255,0.9);
+  border: 1px solid rgba(0,0,0,0.08);
+  padding: 2px 8px;
+  border-radius: 12px;
+  z-index: 10;
+  cursor: help;
+  transition: all 0.15s;
+}
+.aether-clarity-badge:hover { transform: scale(1.05); }
+
+/* ── Readability Indicator ───────────────────────────────── */
+.aether-readability {
+  position: absolute;
+  top: 6px;
+  left: 80px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 10px;
+  background: rgba(255,255,255,0.9);
+  border: 1px solid rgba(0,0,0,0.06);
+  padding: 2px 8px;
+  border-radius: 12px;
+  z-index: 10;
+}
+
+/* ── Tone Analysis Badge ─────────────────────────────────── */
+.aether-tone-badge {
+  position: absolute;
+  top: 6px;
+  left: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 10px;
+  color: #a5b4fc;
+  background: rgba(99,102,241,0.08);
+  border: 1px solid rgba(99,102,241,0.15);
+  padding: 2px 8px;
+  border-radius: 12px;
+  z-index: 10;
+  cursor: help;
+  text-transform: capitalize;
+  transition: all 0.15s;
+}
+.aether-tone-badge:hover { background: rgba(99,102,241,0.15); }
+.aether-tone-sep { color: rgba(255,255,255,0.15); font-size: 8px; }
+
+/* ── Trick Question Warning ──────────────────────────────── */
+.aether-trick-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 8px 10px;
+  background: rgba(245,158,11,0.06);
+  border: 1px solid rgba(245,158,11,0.2);
+  border-radius: 8px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 11px;
+  line-height: 1.4;
+  cursor: help;
+  animation: aether-fade-in 0.2s ease-out;
+}
+.aether-trick-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: rgba(245,158,11,0.15);
+  color: #f59e0b;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.aether-trick-text { color: #92722a; }
+.aether-trick-text strong { text-transform: capitalize; color: #c68a1e; }
+
+/* ── Question Difficulty Badge ───────────────────────────── */
+.aether-difficulty-badge {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.aether-difficulty-badge[data-level="hard"] { background: rgba(239,68,68,0.1); color: #ef4444; }
+.aether-difficulty-badge[data-level="medium"] { background: rgba(245,158,11,0.1); color: #f59e0b; }
+
+/* ── Form Progress Bar ───────────────────────────────────── */
+.aether-progress-bar {
+  position: relative;
+  width: 100%;
+  height: 6px;
+  background: rgba(99,102,241,0.08);
+  border-radius: 3px;
+  margin-bottom: 14px;
+  overflow: visible;
+}
+.aether-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #6366f1, #818cf8);
+  border-radius: 3px;
+  transition: width 0.3s ease, background 0.3s ease;
+}
+.aether-progress-label {
+  position: absolute;
+  right: 0;
+  top: -18px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 10px;
+  color: #888;
+}
+
+/* ── Form Type Badge ─────────────────────────────────────── */
+.aether-form-type-badge {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 2147483640;
+  display: flex;
+  gap: 4px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  cursor: help;
+  animation: aether-fade-in 0.3s ease-out;
+}
+.aether-form-type-chip {
+  display: inline-block;
+  padding: 3px 10px;
+  background: rgba(99,102,241,0.1);
+  border: 1px solid rgba(99,102,241,0.2);
+  border-radius: 12px;
+  color: #a5b4fc;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+/* ── Company Research Card ───────────────────────────────── */
+.aether-research-card {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 2147483640;
+  width: 340px;
+  max-height: 70vh;
+  background: #12122a;
+  border: 1px solid rgba(99,102,241,0.3);
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow: hidden;
+  animation: aether-slide-up 0.2s ease-out;
+}
+.aether-research-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  background: rgba(99,102,241,0.06);
+  cursor: pointer;
+  color: #c0c0e0;
+  font-size: 12px;
+  user-select: none;
+  transition: background 0.1s;
+}
+.aether-research-header:hover { background: rgba(99,102,241,0.12); }
+.aether-research-header strong { color: #e0e0ff; }
+.aether-research-icon { display: flex; color: #818cf8; }
+.aether-research-chevron { margin-left: auto; font-size: 10px; color: #666; transition: transform 0.15s; }
+.aether-research-body {
+  padding: 12px 14px;
+  overflow-y: auto;
+  max-height: calc(70vh - 60px);
+  color: #c0c0e0;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.aether-research-loading { color: #a5b4fc; padding: 10px 0; text-align: center; }
+.aether-research-section { margin-bottom: 12px; }
+.aether-research-section strong {
+  display: block;
+  color: #a5b4fc;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+.aether-research-section p { margin: 0; }
+.aether-research-section ul { margin: 4px 0 0 0; padding-left: 16px; }
+.aether-research-section li { margin-bottom: 3px; }
+.aether-research-keywords { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.aether-keyword-chip {
+  display: inline-block;
+  padding: 2px 8px;
+  background: rgba(99,102,241,0.12);
+  border: 1px solid rgba(99,102,241,0.2);
+  border-radius: 12px;
+  color: #a5b4fc;
+  font-size: 10px;
+  font-weight: 500;
+}
+.aether-keyword-chip.aether-keyword-tech { background: rgba(34,197,94,0.08); border-color: rgba(34,197,94,0.2); color: #4ade80; }
+.aether-keyword-chip.aether-keyword-soft { background: rgba(245,158,11,0.08); border-color: rgba(245,158,11,0.2); color: #fbbf24; }
+.aether-keyword-chip.aether-keyword-cert { background: rgba(236,72,153,0.08); border-color: rgba(236,72,153,0.2); color: #f472b6; }
+
+/* ── ATS Panel ───────────────────────────────────────────── */
+.aether-ats-panel {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 2147483640;
+  width: 300px;
+  background: #12122a;
+  border: 1px solid rgba(34,197,94,0.3);
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow: hidden;
+  animation: aether-slide-up 0.2s ease-out;
+}
+.aether-ats-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  background: rgba(34,197,94,0.06);
+  cursor: pointer;
+  color: #86efac;
+  font-size: 12px;
+  font-weight: 600;
+  user-select: none;
+  transition: background 0.1s;
+}
+.aether-ats-header:hover { background: rgba(34,197,94,0.12); }
+.aether-ats-count {
+  margin-left: auto;
+  background: rgba(34,197,94,0.15);
+  color: #4ade80;
+  padding: 1px 7px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 700;
+}
+.aether-ats-body { padding: 12px 14px; color: #c0c0e0; font-size: 12px; }
+.aether-ats-section { margin-bottom: 10px; }
+.aether-ats-section strong { display: block; color: #86efac; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+.aether-ats-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+
+/* ATS Highlight in job description text */
+mark.aether-ats-highlight {
+  background: rgba(34,197,94,0.15);
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 2px;
+  border-bottom: 2px solid rgba(34,197,94,0.4);
+}
+
+/* ── Red Flag Detector ───────────────────────────────────── */
+.aether-red-flags {
+  position: fixed;
+  top: 70px;
+  right: 20px;
+  z-index: 2147483640;
+  width: 280px;
+  background: #1a1020;
+  border: 1px solid rgba(239,68,68,0.25);
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow: hidden;
+  animation: aether-fade-in 0.3s ease-out;
+}
+.aether-red-flags-header {
+  padding: 10px 14px;
+  background: rgba(239,68,68,0.06);
+  color: #fca5a5;
+  font-size: 12px;
+  font-weight: 600;
+}
+.aether-red-flag-item {
+  padding: 8px 14px;
+  border-top: 1px solid rgba(239,68,68,0.08);
+  font-size: 11px;
+  line-height: 1.4;
+}
+.aether-red-flag-item strong { display: block; margin-bottom: 2px; }
+.aether-red-flag-item span { color: #999; }
+.aether-flag-warning strong { color: #ef4444; }
+.aether-flag-caution strong { color: #f59e0b; }
+.aether-flag-info strong { color: #60a5fa; }
+
+/* ── Salary Badge ────────────────────────────────────────── */
+.aether-salary-badge {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 2147483640;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 14px;
+  background: #12122a;
+  border: 1px solid rgba(34,197,94,0.3);
+  border-radius: 20px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 12px;
+  color: #86efac;
+  font-weight: 600;
+  animation: aether-fade-in 0.3s ease-out;
+  cursor: help;
+}
+.aether-salary-icon {
+  width: 20px; height: 20px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(34,197,94,0.15);
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* ── Visual Diff ─────────────────────────────────────────── */
+.aether-diff-btn {
+  position: absolute;
+  bottom: 28px;
+  right: 8px;
+  padding: 3px 10px;
+  background: rgba(99,102,241,0.12);
+  border: 1px solid rgba(99,102,241,0.2);
+  border-radius: 6px;
+  color: #a5b4fc;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.1s;
+}
+.aether-diff-btn:hover { background: rgba(99,102,241,0.2); color: #c7d2fe; }
+
+.aether-diff-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+  animation: aether-fade-in 0.15s;
+}
+.aether-diff-content {
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  background: #12122a;
+  border: 1px solid rgba(99,102,241,0.3);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+}
+.aether-diff-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: rgba(99,102,241,0.06);
+  border-bottom: 1px solid rgba(99,102,241,0.12);
+  color: #d0d0ee;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 13px;
+}
+.aether-diff-close-btn {
+  padding: 4px 12px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px;
+  color: #aaa;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.1s;
+}
+.aether-diff-close-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
+.aether-diff-body {
+  padding: 16px;
+  overflow-y: auto;
+  max-height: calc(80vh - 60px);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 13px;
+  line-height: 1.65;
+  color: #c0c0e0;
+  white-space: pre-wrap;
+}
+.aether-diff-removed {
+  background: rgba(239,68,68,0.15);
+  color: #fca5a5;
+  text-decoration: line-through;
+  border-radius: 2px;
+  padding: 0 2px;
+}
+.aether-diff-added {
+  background: rgba(34,197,94,0.15);
+  color: #86efac;
+  border-radius: 2px;
+  padding: 0 2px;
+}
+
+/* ── Sensitive Field Warning ─────────────────────────────── */
+.aether-sensitive-warn {
+  margin-top: 3px;
+}
+
+/* ── Next Question Hint ──────────────────────────────────── */
+.aether-next-hint {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 10px;
+  color: #a5b4fc;
+  padding: 4px 0;
+  opacity: 0.7;
+  animation: aether-fade-in 0.3s ease-out;
+}
+
+/* ── JD Simplifier ───────────────────────────────────────── */
+.aether-jd-simplify-btn {
+  display: inline-block;
+  padding: 6px 16px;
+  margin-bottom: 10px;
+  background: rgba(99,102,241,0.1);
+  border: 1px solid rgba(99,102,241,0.25);
+  border-radius: 8px;
+  color: #a5b4fc;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.aether-jd-simplify-btn:hover { background: rgba(99,102,241,0.18); }
+.aether-jd-simplify-btn:disabled { opacity: 0.5; cursor: default; }
+.aether-jd-simplified {
+  background: rgba(99,102,241,0.04);
+  border: 1px solid rgba(99,102,241,0.15);
+  border-radius: 10px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+.aether-jd-simplified-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  background: rgba(99,102,241,0.06);
+  border-bottom: 1px solid rgba(99,102,241,0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 12px;
+  color: #a5b4fc;
+}
+.aether-jd-toggle {
+  padding: 3px 10px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 5px;
+  color: #aaa;
+  font-size: 10px;
+  cursor: pointer;
+  transition: all 0.1s;
+}
+.aether-jd-toggle:hover { background: rgba(255,255,255,0.12); color: #fff; }
+.aether-jd-simplified-body {
+  padding: 14px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #c0c0e0;
+  white-space: pre-wrap;
+}
+
+/* ── Shared Animations ───────────────────────────────────── */
+@keyframes aether-fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes aether-slide-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
