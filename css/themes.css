@@ -1,70 +1,56 @@
 :root {
-  --accent: #6b46c0;
-  --accent-light: #9f7aea;
+  --accent: #7c3aed;
+  --accent-light: #a78bfa;
   --bg: #ffffff;
-  --surface: #f8f9fa;
-  --text: #1a202c;
-  --text-muted: #718096;
+  --surface: #f8fafc;
+  --text: #0f172a;
+  --muted: #64748b;
   --border: #e2e8f0;
-  --success: #48bb78;
-  --error: #f56565;
-  --shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  --success: #10b981;
+  --error: #ef4444;
+  --shadow-sm: 0 4px 6px -1px rgb(0 0 0 / 0.1);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #0f172a;
-    --surface: #1e2937;
-    --text: #e2e8f0;
-    --text-muted: #94a3b8;
+    --surface: #1e293b;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
     --border: #334155;
   }
 }
 
-body, .aether-panel {
+body, .aether-ui {
+  font-family: 'CustomBody', system-ui, sans-serif;
   background: var(--bg);
   color: var(--text);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  transition: background 0.3s ease, color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
-.aether-panel {
-  box-shadow: var(--shadow);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-}
+h1, h2, h3 { font-family: 'CustomHeading', system-ui, sans-serif; }
 
 button {
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s ease;
+  border-radius: 9999px;
 }
 
-button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 6px -1px rgb(107 70 192 / 0.3);
+button:hover { transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+
+/* Floating toolbar */
+#aether-toolbar {
+  position: absolute;
+  z-index: 2147483647;
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  color: white;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  box-shadow: 0 10px 25px rgba(124,58,237,0.4);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  font-weight: 600;
+  cursor: pointer;
 }
 
-.loading {
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-.tab-active {
-  border-bottom: 3px solid var(--accent);
-  color: var(--accent);
-}
-.toast {
-  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-  background: #333; color: white; padding: 12px 24px; border-radius: 9999px;
-  z-index: 2147483648; opacity: 0; transition: opacity 0.4s;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-}
-.toast.show { opacity: 1; }
-
-.inline-suggest {
-  position: absolute; background: var(--surface); border: 1px solid var(--accent-light);
-  border-radius: 8px; padding: 8px 12px; max-width: 340px; z-index: 2147483647;
-  box-shadow: var(--shadow); font-size: 13px; pointer-events: none;
-}
+/* ... more styles for popup, sidepanel, toasts, etc. */
