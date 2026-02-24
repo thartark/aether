@@ -1,0 +1,37 @@
+<!-- ... keep previous -->
+<h2>Answer History</h2>
+<div id="history"></div>
+
+<style>
+  .history-item { padding:12px; border-bottom:1px solid var(--border); }
+  .stars { font-size:18px; cursor:pointer; }
+  .stars span:hover { color:gold; }
+</style>
+<h2 style="margin-top:40px;">Personal Vault — Quick Add</h2>
+<textarea id="vault-input" placeholder="Paste resume bullet, achievement, or bio here..."></textarea>
+<button id="save-vault">Add to Vault</button>
+<div id="vault-list"></div>
+
+<script>
+// ... in options.js
+document.getElementById('save-vault').addEventListener('click', async () => {
+  const text = document.getElementById('vault-input').value.trim();
+  if (!text) return;
+  const p = await Profile.get();
+  p.vault = p.vault || [];
+  p.vault.push({ text, timestamp: Date.now() });
+  await Profile.save(p);
+  loadVault();
+  document.getElementById('vault-input').value = '';
+});
+
+async function loadVault() {
+  const p = await Profile.get();
+  document.getElementById('vault-list').innerHTML = (p.vault || []).map(v => `
+    <div style="padding:10px; border-bottom:1px solid var(--border);">
+      ${new Date(v.timestamp).toLocaleDateString()} — ${v.text.slice(0,120)}...
+    </div>
+  `).join('') || '<p>Vault empty — add achievements/resume bullets!</p>';
+}
+loadVault(); // call after loadHistory()
+</script>

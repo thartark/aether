@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Aether Side Panel</title>
+  <link rel="stylesheet" href="../css/themes.css">
+  <style>
+    body { padding:16px; font-size:14px; height:100vh; margin:0; display:flex;flex-direction:column; }
+    #header { font-size:18px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; }
+    #voice-btn { background:none; border:none; font-size:24px; cursor:pointer; }
+    #input { width:100%; padding:10px; border-radius:8px; border:1px solid var(--border); margin-bottom:12px; resize:vertical; min-height:100px; }
+    #generate, #autofill { width:100%; padding:12px; margin:8px 0; background:var(--accent); color:white; border:none; border-radius:9999px; font-weight:600; }
+    #result { margin-top:16px; white-space:pre-wrap; background:var(--surface); padding:12px; border-radius:8px; border:1px solid var(--border); }
+    #loading { text-align:center; padding:40px; display:none; }
+    progress { width:100%; height:6px; margin:8px 0; }
+  </style>
+</head>
+<body>
+  <div id="header">
+    ✨ Aether Side Panel
+    <button id="voice-btn" aria-label="Start voice input">🎤</button>
+  </div>
+  <textarea id="input" placeholder="Type, paste, or speak your question..."></textarea>
+  <button id="generate">Generate Best Answer</button>
+  <button id="autofill">Auto-Fill Form (AI + Profile)</button>
+  <progress id="progress" max="100" value="0" style="display:none;"></progress>
+  <div id="loading" class="loading">Processing...</div>
+  <div id="result"></div>
+
+  <script src="../js/ai-orchestrator.js"></script>
+  <script src="../js/theme.js"></script>
+  <script>
+    const inputEl = document.getElementById('input');
+    const resultEl = document.getElementById('result');
+    const loadingEl = document.getElementById('loading');
+    const progress = document.getElementById('progress');
+
+    // Voice input
+    let recognition;
+    if ('webkitSpeechRecognition' in window) {
+      recognition = new webkitSpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = 'en-US';
+
+      recognition.onresult = e => {
+        inputEl.value += (inputEl.value ? ' ' : '') + e.results[0][0].transcript;
+        recognition.stop();
+        document.getElementById('voice-btn').textContent = '🎤';
+      };
+      recognition.onerror = e => {
+        alert('Voice error: ' + e.error);
+        document.getElementById('voice-btn').textContent = '🎤';
+      };
+    } else {
+      document.getElementById('voice-btn').disabled = true;
+      document.getElementById('voice-btn').title = 'Voice not supported in this browser';
+    }
+
+    document.getElementById('voice-btn').addEventListener('click', () => {
+      if (recognition) {
+        recognition.start();
+        document.getElementById('voice-btn').textContent = '🔴 Listening...';
+      }
+    });
+
+    // Generate
+    document.getElementById('generate').addEventListener('click', async () => {
+      const text = inputEl.value.trim();
+      if (!text) return;
+      loadingEl.style.display = 'block';
+      progress.style.display = 'block';
+      progress.value = 20;
+      try {
+        const res = await AetherAI.synthesizeAnswer(text, "Side Panel", location.href || "unknown", { progress });
+        resultEl.innerHTML = `<strong>Best Fit:</strong><br>${res.best || res.error}<br><br>${res.warning ? `<strong style="color:red;">${res.warning}</strong>` : ''}`;
+      } catch (e) {
+        resultEl.innerHTML = `Error: ${e.message}`;
+      } finally {
+        loadingEl.style.display = 'none';
+        progress.style.display = 'none';
+      }
+    });
+
+    // Basic auto-fill stub
+    document.getElementById('autofill').addEventListener('click', () => {
+      chrome.tabs.query({active:true, currentWindow:true}, tabs => {
+        chrome.scripting.executeScript({
+          target: {tabId: tabs[0].id},
+          func: () => {
+            const fields = document.querySelectorAll('input[type="text"], textarea, input[type="email"]');
+            fields.forEach(f => {
+              if (!f.value) f.value = "Aether auto-filled demo value";
+              f.dispatchEvent(new Event('input', {bubbles:true}));
+            });
+            alert("Basic auto-fill demo applied to visible text fields!");
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
