@@ -1,0 +1,286 @@
+/* ============================================================
+   Aether - Content Script Styles
+   ============================================================ */
+
+/* ── Floating Toolbar ──────────────────────────────────────── */
+#aether-toolbar {
+  position: absolute;
+  z-index: 2147483647;
+  display: none;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  background: #1a1a2e;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(99, 102, 241, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  animation: aether-fade-in 0.15s ease-out;
+}
+
+#aether-toolbar.aether-visible {
+  display: flex;
+}
+
+#aether-toolbar button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: #e0e0ff;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+#aether-toolbar button:hover {
+  background: rgba(99, 102, 241, 0.2);
+  color: #fff;
+}
+
+#aether-toolbar button.aether-primary {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: #fff;
+}
+
+#aether-toolbar button.aether-primary:hover {
+  background: linear-gradient(135deg, #818cf8, #6366f1);
+}
+
+#aether-toolbar button svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+#aether-toolbar .aether-divider {
+  width: 1px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 0 2px;
+}
+
+/* ── Inline Result Panel ───────────────────────────────────── */
+#aether-result-panel {
+  position: fixed;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  z-index: 2147483646;
+  width: 400px;
+  max-height: 70vh;
+  background: #1a1a2e;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: 14px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow: hidden;
+  animation: aether-slide-in 0.2s ease-out;
+  display: none;
+}
+
+#aether-result-panel.aether-visible {
+  display: flex;
+  flex-direction: column;
+}
+
+#aether-result-panel .aether-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: rgba(99, 102, 241, 0.08);
+  border-bottom: 1px solid rgba(99, 102, 241, 0.15);
+}
+
+#aether-result-panel .aether-panel-header h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #e0e0ff;
+}
+
+#aether-result-panel .aether-panel-header .aether-badge {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  background: rgba(99, 102, 241, 0.2);
+  color: #a5b4fc;
+}
+
+#aether-result-panel .aether-panel-close {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #a0a0cc;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+}
+
+#aether-result-panel .aether-panel-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+#aether-result-panel .aether-panel-close svg {
+  width: 16px;
+  height: 16px;
+}
+
+#aether-result-panel .aether-panel-header h3 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+#aether-result-panel .aether-panel-header h3 svg {
+  width: 16px;
+  height: 16px;
+  color: #818cf8;
+}
+
+#aether-result-panel .aether-panel-actions button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+#aether-result-panel .aether-panel-actions button svg {
+  width: 14px;
+  height: 14px;
+}
+
+#aether-result-panel .aether-panel-body {
+  padding: 16px;
+  overflow-y: auto;
+  max-height: calc(70vh - 100px);
+  color: #d0d0ee;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+#aether-result-panel .aether-panel-body p {
+  margin: 0 0 10px;
+}
+
+#aether-result-panel .aether-panel-body .aether-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 40px 20px;
+  color: #a5b4fc;
+  font-size: 13px;
+}
+
+#aether-result-panel .aether-panel-body .aether-error {
+  padding: 12px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 8px;
+  color: #fca5a5;
+  font-size: 13px;
+}
+
+#aether-result-panel .aether-panel-actions {
+  display: flex;
+  gap: 6px;
+  padding: 12px 16px;
+  border-top: 1px solid rgba(99, 102, 241, 0.15);
+}
+
+#aether-result-panel .aether-panel-actions button {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: 8px;
+  background: transparent;
+  color: #c0c0dd;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+#aether-result-panel .aether-panel-actions button:hover {
+  background: rgba(99, 102, 241, 0.15);
+  color: #fff;
+  border-color: rgba(99, 102, 241, 0.4);
+}
+
+#aether-result-panel .aether-panel-actions button.aether-btn-primary {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  border-color: transparent;
+  color: #fff;
+}
+
+/* ── Spinner ───────────────────────────────────────────────── */
+.aether-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(99, 102, 241, 0.2);
+  border-top-color: #6366f1;
+  border-radius: 50%;
+  animation: aether-spin 0.6s linear infinite;
+}
+
+/* ── Notification Toast ────────────────────────────────────── */
+#aether-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 2147483647;
+  padding: 12px 20px;
+  background: #1a1a2e;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: 10px;
+  color: #e0e0ff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 13px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  animation: aether-fade-in 0.2s ease-out;
+  display: none;
+}
+
+#aether-toast.aether-visible {
+  display: block;
+}
+
+#aether-toast.aether-success {
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+#aether-toast.aether-error {
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+/* ── Animations ────────────────────────────────────────────── */
+@keyframes aether-fade-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes aether-slide-in {
+  from { opacity: 0; transform: translateY(-50%) translateX(20px); }
+  to { opacity: 1; transform: translateY(-50%) translateX(0); }
+}
+
+@keyframes aether-spin {
+  to { transform: rotate(360deg); }
+}

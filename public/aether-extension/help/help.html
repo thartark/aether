@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aether - Help &amp; Guide</title>
+  <style>
+    :root { --bg: #0f0f1a; --bg2: #1a1a2e; --text: #e8e8f0; --text2: #a0a0c0; --muted: #6b6b8d; --accent: #6366f1; --accent2: #818cf8; --border: rgba(255,255,255,0.06); --radius: 12px; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+    .container { max-width: 720px; margin: 0 auto; padding: 40px 24px; }
+    h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 8px; }
+    .subtitle { color: var(--muted); font-size: 15px; margin-bottom: 32px; }
+    .section { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 20px; }
+    .section h2 { font-size: 18px; font-weight: 600; margin-bottom: 14px; color: var(--accent2); }
+    .section p, .section li { color: var(--text2); font-size: 14px; }
+    .section ul { padding-left: 20px; }
+    .section li { margin-bottom: 8px; }
+    .section li strong { color: var(--text); }
+    kbd { display: inline-block; padding: 2px 8px; background: var(--bg); border: 1px solid var(--border); border-radius: 4px; font-family: monospace; font-size: 12px; color: var(--accent2); }
+    .shortcut-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .shortcut-row:last-child { border-bottom: none; }
+    .shortcut-desc { color: var(--text2); font-size: 13px; }
+    .provider-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+    .provider-card { padding: 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; }
+    .provider-card h3 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .provider-card p { font-size: 12px; color: var(--muted); }
+    .provider-card a { color: var(--accent2); font-size: 12px; text-decoration: none; }
+    .provider-card a:hover { text-decoration: underline; }
+    .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+    .feature { padding: 10px 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; font-size: 13px; color: var(--text2); }
+    .feature strong { color: var(--text); display: block; margin-bottom: 2px; }
+    .footer { text-align: center; padding: 24px; color: var(--muted); font-size: 12px; }
+    .footer a { color: var(--accent2); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Aether Help Guide</h1>
+    <p class="subtitle">Everything you need to know about using Aether - your AI-powered answer engine.</p>
+
+    <div class="section">
+      <h2>Getting Started</h2>
+      <ul>
+        <li><strong>Add an API key:</strong> Click the extension icon, then use the onboarding panel or go to Settings to add a key. Groq is free and fast!</li>
+        <li><strong>Select text:</strong> Highlight any text on a webpage. The floating toolbar appears above your selection.</li>
+        <li><strong>Click an action:</strong> Choose Answer, Summarize, Improve, STAR, Bullets, Translate, Compare, or Copy.</li>
+        <li><strong>Use the popup:</strong> Click the extension icon for the full interface with all controls.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Keyboard Shortcuts</h2>
+      <div class="shortcut-row"><span class="shortcut-desc">Generate answer from selection</span><kbd>Ctrl+Shift+A</kbd></div>
+      <div class="shortcut-row"><span class="shortcut-desc">Toggle floating toolbar</span><kbd>Ctrl+Shift+E</kbd></div>
+      <div class="shortcut-row"><span class="shortcut-desc">Close panel / toolbar</span><kbd>Escape</kbd></div>
+    </div>
+
+    <div class="section">
+      <h2>Supported AI Providers</h2>
+      <p>Aether works with 4 major AI providers. You can use one or all of them.</p>
+      <div class="provider-grid">
+        <div class="provider-card"><h3>Groq</h3><p>Free, blazing fast. Uses Llama 3.3 70B.</p><a href="https://console.groq.com/keys" target="_blank">Get free key</a></div>
+        <div class="provider-card"><h3>OpenAI (ChatGPT)</h3><p>GPT-4o, GPT-4o-mini. Best all-rounder.</p><a href="https://platform.openai.com/api-keys" target="_blank">Get key</a></div>
+        <div class="provider-card"><h3>Anthropic (Claude)</h3><p>Claude Sonnet 4. Excellent writing quality.</p><a href="https://console.anthropic.com/settings/keys" target="_blank">Get key</a></div>
+        <div class="provider-card"><h3>Google (Gemini)</h3><p>Gemini 1.5 Flash/Pro. Great for research.</p><a href="https://aistudio.google.com/app/apikey" target="_blank">Get key</a></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Key Features</h2>
+      <div class="feature-grid">
+        <div class="feature"><strong>Multi-AI Compare</strong>Query all providers simultaneously, see side-by-side answers.</div>
+        <div class="feature"><strong>Answer Fusion</strong>Synthesize the best parts from multiple AI answers into one.</div>
+        <div class="feature"><strong>Multi-Persona</strong>See how a Leader, Analyst, Creative, or Empath would answer.</div>
+        <div class="feature"><strong>Devil's Advocate</strong>Get a constructive critique of your answer with improvement suggestions.</div>
+        <div class="feature"><strong>STAR Method</strong>Auto-structure answers using Situation, Task, Action, Result.</div>
+        <div class="feature"><strong>Context Detection</strong>Auto-detects job apps, emails, technical, and academic contexts.</div>
+        <div class="feature"><strong>Sensitive Masking</strong>Blocks SSN, credit card, and other sensitive data from being sent to AI.</div>
+        <div class="feature"><strong>Profile Vault</strong>Store your skills, experience, and STAR examples for personalized answers.</div>
+        <div class="feature"><strong>Custom Templates</strong>Create reusable prompt templates for your specific use cases.</div>
+        <div class="feature"><strong>Creativity Slider</strong>Control the creativity vs. factuality of AI responses.</div>
+        <div class="feature"><strong>Reading Level</strong>Adjust output from Simple to Executive level.</div>
+        <div class="feature"><strong>History + Export</strong>Full answer history with search, filter, and JSON export.</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Privacy</h2>
+      <ul>
+        <li>All personal data (profile, API keys, history) is stored <strong>locally on your device</strong> using Chrome storage.</li>
+        <li>Text is only sent to the AI provider <strong>you</strong> select. No intermediary servers.</li>
+        <li>Enable <strong>Private Mode</strong> in settings to prevent history/analytics tracking.</li>
+        <li>Use <strong>Export/Import</strong> in settings to backup or transfer your data.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Troubleshooting</h2>
+      <ul>
+        <li><strong>"Extension context invalidated"</strong> - The extension was updated or reloaded. Refresh the webpage.</li>
+        <li><strong>Toolbar not appearing</strong> - Make sure "Floating Toolbar" is enabled in Settings. Some sites with strict CSP may block it.</li>
+        <li><strong>API errors</strong> - Check your API key is correct. Verify you have credits/quota with your provider.</li>
+        <li><strong>No models showing</strong> - Select a provider first, then models will populate.</li>
+      </ul>
+    </div>
+
+    <div class="footer">Aether v2.0 | <a href="https://github.com" target="_blank">GitHub</a> | All data stays on your device.</div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aether</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-left">
+      <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.912 5.813a2 2 0 001.275 1.275L21 12l-5.813 1.912a2 2 0 00-1.275 1.275L12 21l-1.912-5.813a2 2 0 00-1.275-1.275L3 12l5.813-1.912a2 2 0 001.275-1.275L12 3z"/></svg></div>
+      <div class="header-text">
+        <span class="header-title">Aether</span>
+        <span class="header-version">v2.0</span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" id="btn-theme" title="Toggle theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button>
+      <button class="icon-btn" id="btn-settings" title="Full Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09a1.65 1.65 0 00-1.08-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09a1.65 1.65 0 001.51-1.08 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001.08 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1.08z"/></svg></button>
+    </div>
+  </header>
+
+  <!-- Stats Bar -->
+  <div class="stats-bar" id="stats-bar">
+    <div class="stat"><span class="stat-val" id="stat-generated">0</span><span class="stat-label">Generated</span></div>
+    <div class="stat"><span class="stat-val" id="stat-time-saved">0m</span><span class="stat-label">Time Saved</span></div>
+    <div class="stat"><span class="stat-val" id="stat-words">0</span><span class="stat-label">Words</span></div>
+    <div class="stat"><span class="stat-val" id="stat-streak">0</span><span class="stat-label">Day Streak</span></div>
+  </div>
+
+  <!-- Onboarding Banner -->
+  <div class="onboarding" id="onboarding" style="display:none;">
+    <div class="onboarding-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+    <div class="onboarding-text"><strong>Add an API Key to Get Started</strong><p>You need at least one AI provider key. Groq is free and fast!</p></div>
+    <div class="onboarding-keys">
+      <div class="key-row"><label>Groq <span class="badge-free">FREE</span></label><div class="key-input-wrap"><input type="password" id="onboard-groq" placeholder="gsk_..." /><button class="key-save" data-provider="groq">Save</button></div><a href="https://console.groq.com/keys" target="_blank" class="key-link">Get free Groq key</a></div>
+      <div class="key-row"><label>OpenAI</label><div class="key-input-wrap"><input type="password" id="onboard-openai" placeholder="sk-..." /><button class="key-save" data-provider="openai">Save</button></div><a href="https://platform.openai.com/api-keys" target="_blank" class="key-link">Get key</a></div>
+      <div class="key-row"><label>Claude</label><div class="key-input-wrap"><input type="password" id="onboard-anthropic" placeholder="sk-ant-..." /><button class="key-save" data-provider="anthropic">Save</button></div><a href="https://console.anthropic.com/settings/keys" target="_blank" class="key-link">Get key</a></div>
+      <div class="key-row"><label>Gemini</label><div class="key-input-wrap"><input type="password" id="onboard-google" placeholder="AIza..." /><button class="key-save" data-provider="google">Save</button></div><a href="https://aistudio.google.com/app/apikey" target="_blank" class="key-link">Get key</a></div>
+    </div>
+  </div>
+
+  <!-- Provider Status Bar -->
+  <div class="provider-bar" id="provider-bar"></div>
+
+  <!-- Nav Tabs -->
+  <nav class="tabs">
+    <button class="tab active" data-tab="generate">Generate</button>
+    <button class="tab" data-tab="compare">Compare</button>
+    <button class="tab" data-tab="personas">Personas</button>
+    <button class="tab" data-tab="history">History</button>
+    <button class="tab" data-tab="apps">Apps</button>
+    <button class="tab" data-tab="badges">Badges</button>
+  </nav>
+
+  <!-- ═══ Generate Tab ═══ -->
+  <div class="tab-content active" id="tab-generate">
+    <div class="tab-body">
+      <div class="context-badge" id="context-badge" style="display:none;"></div>
+
+      <div class="field">
+        <label class="field-label">Your question or selected text</label>
+        <textarea class="textarea" id="input-text" placeholder="Select text on any webpage, or type here..." rows="3"></textarea>
+        <div class="field-meta"><span id="input-char-count">0 chars</span><span id="char-limit-badge"></span></div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="field">
+        <label class="field-label">Action</label>
+        <div class="chip-group" id="template-chips">
+          <button class="chip active" data-template="general">Answer</button>
+          <button class="chip" data-template="summarize">Summarize</button>
+          <button class="chip" data-template="expand">Expand</button>
+          <button class="chip" data-template="simplify">Simplify</button>
+          <button class="chip" data-template="fix-grammar">Fix Grammar</button>
+          <button class="chip" data-template="explain">Explain</button>
+          <button class="chip" data-template="pros-cons">Pros/Cons</button>
+          <button class="chip" data-template="email">Email</button>
+          <button class="chip" data-template="job-application">Job App</button>
+          <button class="chip" data-template="star-method">STAR</button>
+          <button class="chip" data-template="ats-optimize">ATS</button>
+          <button class="chip" data-template="bullet-points">Bullets</button>
+          <button class="chip" data-template="rewrite">Rewrite</button>
+          <button class="chip" data-template="counter-argument">Counter</button>
+          <button class="chip" data-template="linkedin-post">LinkedIn</button>
+          <button class="chip" data-template="elevator-pitch">Pitch</button>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="controls-grid">
+        <div class="field"><label class="field-label">Provider</label><select class="select" id="select-provider"></select></div>
+        <div class="field"><label class="field-label">Model</label><select class="select" id="select-model"></select></div>
+        <div class="field"><label class="field-label">Tone</label><select class="select" id="select-tone"></select></div>
+        <div class="field"><label class="field-label">Persona</label><select class="select" id="select-persona"></select></div>
+      </div>
+
+      <!-- Length & Reading Level -->
+      <div class="controls-row">
+        <div class="field flex-1">
+          <label class="field-label">Length</label>
+          <div class="length-pills">
+            <button class="pill" data-length="short">Short</button>
+            <button class="pill active" data-length="medium">Medium</button>
+            <button class="pill" data-length="long">Detailed</button>
+          </div>
+        </div>
+        <div class="field flex-1">
+          <label class="field-label">Reading Level</label>
+          <select class="select" id="select-reading-level">
+            <option value="simple">Simple</option>
+            <option value="standard" selected>Standard</option>
+            <option value="advanced">Advanced</option>
+            <option value="executive">Executive</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Creativity Slider -->
+      <div class="field">
+        <label class="field-label">Creativity <span class="slider-val" id="creativity-val">50%</span></label>
+        <div class="slider-row">
+          <span class="slider-label">Factual</span>
+          <input type="range" class="slider" id="creativity-slider" min="0" max="100" value="50" />
+          <span class="slider-label">Creative</span>
+        </div>
+      </div>
+
+      <!-- Char limit -->
+      <div class="field">
+        <label class="field-label">Character Limit <span class="field-hint">(optional, 0 = unlimited)</span></label>
+        <input type="number" class="input-sm" id="input-char-limit" placeholder="0" min="0" value="0" />
+      </div>
+
+      <!-- Generate Buttons -->
+      <div class="action-row">
+        <button class="btn-generate" id="btn-generate">Generate Answer</button>
+        <button class="btn-outline" id="btn-compare-quick" title="Compare across all providers">Compare</button>
+        <button class="btn-outline" id="btn-personas-quick" title="Multi-persona view">Personas</button>
+      </div>
+
+      <!-- Answer Result -->
+      <div class="answer-box" id="answer-box">
+        <div class="answer-top">
+          <span class="answer-meta" id="answer-meta"></span>
+          <div class="answer-btns">
+            <button class="icon-btn-sm" id="btn-copy-answer" title="Copy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>
+            <button class="icon-btn-sm" id="btn-insert-answer" title="Insert into active field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M15 2H9a1 1 0 00-1 1v2c0 .6.4 1 1 1h6c.6 0 1-.4 1-1V3c0-.6-.4-1-1-1z"/><path d="M8 4H6a2 2 0 00-2 2v14a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2"/></svg></button>
+            <button class="icon-btn-sm" id="btn-devils-advocate" title="Devil's Advocate critique"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></button>
+            <button class="icon-btn-sm" id="btn-regenerate" title="Regenerate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg></button>
+          </div>
+        </div>
+        <div class="answer-content" id="answer-content"></div>
+        <div class="answer-footer" id="answer-footer"></div>
+      </div>
+
+      <!-- Devil's Advocate Panel -->
+      <div class="critique-box" id="critique-box" style="display:none;">
+        <div class="critique-header">Devil's Advocate Critique</div>
+        <div class="critique-content" id="critique-content"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ Compare Tab ═══ -->
+  <div class="tab-content" id="tab-compare">
+    <div class="tab-body">
+      <div class="field"><label class="field-label">Text to compare</label><textarea class="textarea" id="compare-text" placeholder="Enter text to send to all configured AI providers..." rows="3"></textarea></div>
+      <div class="action-row" style="margin-bottom:14px;">
+        <button class="btn-generate" id="btn-run-compare">Compare All Providers</button>
+        <button class="btn-outline" id="btn-fuse-answers" title="Combine best parts of all answers" style="display:none;">Fuse</button>
+      </div>
+      <div id="compare-results"></div>
+      <div class="answer-box" id="fused-box" style="display:none;">
+        <div class="answer-top"><span class="answer-meta">Fused Answer (best of all)</span><div class="answer-btns"><button class="icon-btn-sm" id="btn-copy-fused" title="Copy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button></div></div>
+        <div class="answer-content" id="fused-content"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ Personas Tab ═══ -->
+  <div class="tab-content" id="tab-personas">
+    <div class="tab-body">
+      <div class="field"><label class="field-label">Text for multi-persona analysis</label><textarea class="textarea" id="personas-text" placeholder="Each persona will answer independently..." rows="3"></textarea></div>
+      <div class="field"><label class="field-label">Select Personas</label>
+        <div class="chip-group" id="persona-selector">
+          <button class="chip active" data-persona="leader">Leader</button>
+          <button class="chip active" data-persona="analyst">Analyst</button>
+          <button class="chip active" data-persona="creative">Creative</button>
+          <button class="chip active" data-persona="empath">Empath</button>
+          <button class="chip" data-persona="professional">Professional</button>
+          <button class="chip" data-persona="technical">Technical</button>
+          <button class="chip" data-persona="concise">Concise</button>
+          <button class="chip" data-persona="friendly">Friendly</button>
+        </div>
+      </div>
+      <button class="btn-generate" id="btn-run-personas" style="margin-bottom:14px;">Run Multi-Persona</button>
+      <div id="personas-results"></div>
+    </div>
+  </div>
+
+  <!-- ═══ History Tab ═══ -->
+  <div class="tab-content" id="tab-history">
+    <div class="tab-body">
+      <input type="search" class="search-input" id="history-search" placeholder="Search past answers..." />
+      <div class="history-filters">
+        <select class="select select-sm" id="history-filter-provider"><option value="">All Providers</option></select>
+        <select class="select select-sm" id="history-filter-template"><option value="">All Templates</option></select>
+      </div>
+      <div id="history-list"></div>
+      <button class="btn-outline btn-sm" id="btn-export-history" style="margin-top:8px;width:100%;">Export History as JSON</button>
+    </div>
+  </div>
+
+  <!-- Apps Tracker Tab -->
+  <div class="tab-content" id="tab-apps">
+    <div class="tab-body">
+      <div class="field">
+        <label class="field-label">Track Job Applications</label>
+        <div class="controls-grid" style="margin-bottom:8px;">
+          <input type="text" class="input-sm" id="app-company" placeholder="Company name" />
+          <input type="text" class="input-sm" id="app-role" placeholder="Role / Position" />
+        </div>
+        <div class="controls-grid" style="margin-bottom:8px;">
+          <input type="url" class="input-sm" id="app-url" placeholder="Job posting URL" />
+          <select class="select select-sm" id="app-status">
+            <option value="saved">Saved</option>
+            <option value="applied" selected>Applied</option>
+            <option value="interview">Interview</option>
+            <option value="offer">Offer</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button class="btn-generate" id="btn-add-app" style="flex:1;">Add Application</button>
+          <button class="btn-outline" id="btn-fit-score" title="Calculate fit score from a job description">Fit Score</button>
+        </div>
+      </div>
+      <div id="apps-list"></div>
+      <div class="answer-box" id="fit-score-box" style="display:none;">
+        <div class="answer-top"><span class="answer-meta">Job Fit Score</span></div>
+        <div class="answer-content" id="fit-score-content"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Badges Tab -->
+  <div class="tab-content" id="tab-badges">
+    <div class="tab-body">
+      <div class="badge-summary" id="badge-summary"></div>
+      <div class="badge-grid" id="badge-grid"></div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="notification"></div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
